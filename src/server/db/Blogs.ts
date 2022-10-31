@@ -1,47 +1,16 @@
-import { Connection } from './index';
+import { Query } from './index';
+import { IBlogs } from '../../types';
 
-export const all = async () => {
-    return new Promise((resolve, reject) => {
-        Connection.query('SELECT * from Blogs', (err, results) => {
-            if(err) {
-                return reject(err);
-            }
-            resolve(results);
-        });
-    });
-};
+const allBlogs = async () => Query<IBlogs[]>('SELECT * FROM blogs');
+const oneBlog = async (id: number) => Query<IBlogs[]>('SELECT * FROM blogs WHERE id = ?', [id]);
+const createBlog = async (newBlog: IBlogs) => Query(`INSERT INTO blogs SET ?`, [newBlog]);
+const updateBlog = async (updateableBlog: IBlogs, id: number) => Query(`UPDATE blogs SET ? WHERE id = ?`, [updateableBlog, id]);
+const deleteBlog = async (id: number) => Query('DELETE FROM blogs WHERE id = ?', [id]);
 
-export const one = async (id) => {
-    return new Promise((resolve, reject) => {
-        Connection.query('SELECT * from Blogs WHERE id = ?', [id], (err, results) => {
-            if(err) {
-                return reject(err);
-            }
-            resolve(results);
-        });
-    });
-}
-
-export const add = async (title, content, authorid, name) => {
-    return new Promise((resolve, reject) => {
-        Connection.query('INSERT INTO Blogs (title, content, authorid) VALUES (?, ?, ?)', [title, content, authorid], (err, results) => {
-            if(err) {
-                return reject(err);
-            }
-            resolve(results);
-        });
-        Connection.query('INSERT INTO Tags VALUES ?', [name], (err, results) => {
-            if(err) {
-                return reject(err);
-            }
-            resolve(results);
-        });
-    });
-};
-
-
-export default {
-    all,
-    one,
-    add
+export default{
+    allBlogs,
+    oneBlog,
+    createBlog,
+    updateBlog,
+    deleteBlog
 }

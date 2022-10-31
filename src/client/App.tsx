@@ -1,41 +1,26 @@
 import * as React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Home from './views/Home';
+import CreateBlog from './views/CreateBlog';
+import EditBlog from './views/EditBlog';
+import SingleBlog from './views/SingleBlog';
+import AllBlogs from './views/AllBlogs';
 
-class App extends React.Component<IAppProps, IAppState> {
-	constructor(props: IAppProps) {
-		super(props);
-		this.state = {
-			 Blogs: []
-		};
-	}
+const App = () => {
+	return (
+		<BrowserRouter>
+			<Navbar />
+			<Routes>
+				<Route path="/" element={<Home />} />
+				<Route path="/create" element={<CreateBlog />} />
+				<Route path="/blogs" element={<AllBlogs />} />
+				<Route path="/blogs/:id" element={<SingleBlog />} />
+				<Route path="/blogs/:id/edit" element={<EditBlog />} />
+			</Routes>
+		</BrowserRouter>
+	)
 
-	async componentDidMount() {
-		try {
-			let r = await fetch('/api/Blogs');
-			let Blogs = await r.json();
-			this.setState({ Blogs });
-		} catch (error) {
-			console.log(error);
-		}
-	}
-
-	render() {
-		return (
-			<main className="container my-5">
-				<h1 className="text-primary text-center">Hello Michael!</h1>
-				<ul className="list-group">
-					{this.state.Blogs.map(blog => {
-						return <li className="list-groups-items" key={`blog-${blog.id}`}>{blog.title}</li>
-					})}
-				</ul>
-			</main>
-		);
-	}
-}
-
-export interface IAppProps {}
-
-interface IAppState {
-	Blogs: Array<{id: number, title: string, content: string, authorid: number, _created: Date}>;
-}
+};
 
 export default App;

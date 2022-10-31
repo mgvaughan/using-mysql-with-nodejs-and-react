@@ -1,16 +1,8 @@
-import { Connection } from './index';
+import { Query } from './index';
+import { IAuthors } from '../../types';
 
-export const all = async () => {
-    return new Promise((resolve, reject) => {
-        Connection.query('SELECT * from Authors', (err, results) => {
-            if(err) {
-                return reject(err);
-            }
-            resolve(results);
-        });
-    });
-};
+const allAuthors = async () => Query<IAuthors[]>('SELECT * From authors');
 
 export default {
-    all
+    allAuthors
 }

@@ -1,16 +1,8 @@
-import { Connection } from './index';
+import { Query } from './index';
+import { IBlogTags } from '../../types';
 
-export const all = async () => {
-    return new Promise((resolve, reject) => {
-        Connection.query('SELECT * from BlogTags', (err, results) => {
-            if(err) {
-                return reject(err);
-            }
-            resolve(results);
-        });
-    });
-};
+const allBlogTags = async () => Query<IBlogTags[]>('SELECT * FROM blogtags');
 
 export default {
-    all
+    allBlogTags
 }
